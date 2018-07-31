@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN" "http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+<mapper namespace="com.powerwin.dao.IAdDao">
+
+	<select id="queryAdList" resultType="java.lang.String">
+		select adid
+		from ad
+		where state = 4
+	</select>
+
+	<insert id="insert_state_log" parameterType="java.util.Map">
+		insert into ad_state_log(adid,status,year,month,day,hour,create_time)
+		values(#{param.adid},#{param.state},#{param.year},#{param.month},#{param.day},#{param.hour},#{param.create})
+	</insert>
+
+	<select id="queryStatusById" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select state
+		from ad
+		where adid = #{adid}
+	</select>
+
+	<select id="kkkqueryLast1HourStateList" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select status
+		from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and <![CDATA[ create_time <= #{param.current} ]]>
+		and <![CDATA[ create_time >= #{param.last_1_hour} ]]>
+		and adid = #{param.adid}
+	</select>
+
+	<select id="kkkqueryLast2HourStateList" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select status
+		from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and <![CDATA[ create_time <= #{param.last_1_hour} ]]>
+		and <![CDATA[ create_time >= #{param.last_2_hour} ]]>
+		and adid = #{param.adid}
+	</select>
+
+	<update id="querycloseTheAd" parameterType="java.lang.String" >
+		update ad
+		set state = 5
+		where adid = #{adid}
+	</update>
+</mapper>
