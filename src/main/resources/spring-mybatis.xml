@@ -1,5 +1,10 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xmlns="http://www.springframework.org/schema/beans" xmlns:context="http://www.springframework.org/schema/context" xmlns:aop="http://www.springframework.org/schema/aop" xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd ">
+<beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+       xmlns="http://www.springframework.org/schema/beans"
+       xmlns:context="http://www.springframework.org/schema/context"
+       xmlns:aop="http://www.springframework.org/schema/aop"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd "
+       >
     <!-- 扫描service包下所有使用注解的类型 -->
     <context:component-scan base-package="com.powerwin.dataSource"/>
     <!-- 配置数据库相关参数properties的属性：${url} -->
@@ -22,7 +27,6 @@
         <property name="numHelperThreads" value="5"></property>
         <!--initialPoolSize：初始化时获取10个连接，取值应在minPoolSize与maxPoolSize之间。 -->
         <property name="initialPoolSize" value="10"></property>
-
     </bean>
     <bean id="slaveDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${slave_mysql_jdbc_driver}" />
@@ -65,7 +69,6 @@
         <property name="basePackage" value="com.powerwin.dao" />
         <property name="sqlSessionTemplateBeanName" value="MasterAndSlaveSqlSessionTemplate" />
     </bean>
-
     <aop:aspectj-autoproxy></aop:aspectj-autoproxy>
     <import resource="switch_coagentquartz.xml"/>
 </beans>
