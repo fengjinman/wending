@@ -1,10 +1,14 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <beans xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
        xmlns="http://www.springframework.org/schema/beans"
-       xmlns:context="http://www.springframework.org/schema/context"
        xmlns:aop="http://www.springframework.org/schema/aop"
-       xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans-4.2.xsd http://www.springframework.org/schema/context http://www.springframework.org/schema/context/spring-context-4.2.xsd http://www.springframework.org/schema/aop http://www.springframework.org/schema/aop/spring-aop-4.2.xsd "
-       >
+       xmlns:context="http://www.springframework.org/schema/context"
+       xsi:schemaLocation="http://www.springframework.org/schema/beans
+       http://www.springframework.org/schema/beans/spring-beans-4.2.xsd
+       http://www.springframework.org/schema/aop
+       http://www.springframework.org/schema/aop/spring-aop-4.2.xsd
+       http://www.springframework.org/schema/context
+       http://www.springframework.org/schema/context/spring-context-4.2.xsd ">
     <!-- 扫描service包下所有使用注解的类型 -->
     <context:component-scan base-package="com.powerwin.dataSource"/>
     <!-- 配置数据库相关参数properties的属性：${url} -->
@@ -15,10 +19,9 @@
         <property name="jdbcUrl" value="${master_mysql_jdbc_url}" />
         <property name="user" value="${master_mysql_jdbc_user}" />
         <property name="password" value="${master_mysql_jdbc_password}" />
+
         <!--idleConnectionTestPeriod：每60秒检查所有连接池中的空闲连接。-->
-        <property name="idleConnectionTestPeriod" value="60"></property>
-        <!--acquireIncrement：链接用完了自动增量3个。 -->
-        <property name="acquireIncrement" value="3"></property>
+        <property name="idleConnectionTestPeriod" value="900"></property>
         <!--maxPoolSize：连接池中保留的最大连接数。 -->
         <property name="maxPoolSize" value="50"></property>
         <!--maxStatements：最大链接数。-->
@@ -27,6 +30,16 @@
         <property name="numHelperThreads" value="5"></property>
         <!--initialPoolSize：初始化时获取10个连接，取值应在minPoolSize与maxPoolSize之间。 -->
         <property name="initialPoolSize" value="10"></property>
+        <!--两次连接中间隔时间，单位毫秒，连接池在获得新连接时的间隔时间-->
+        <property name="acquireRetryDelay" value="1000"></property>
+        <!--连接池在获得新连接失败时重试的次数，如果小于等于0则无限重试直至连接获得成功-->
+        <property name="acquireRetryAttempts" value="5"></property>
+        <!--acquireIncrement：链接用完了自动增量3个 -->
+        <property name="acquireIncrement" value="3"></property>
+        <!--连接的最大空闲时间，如果超过这个时间，某个数据库连接还没有被使用，则会断开掉这个连接-->
+        <property name="maxIdleTime" value="600"></property>
+        <!--连接池保持的最小连接数-->
+        <property name="minPoolSize" value="10"></property>
     </bean>
     <bean id="slaveDataSource" class="com.mchange.v2.c3p0.ComboPooledDataSource" destroy-method="close">
         <property name="driverClass" value="${slave_mysql_jdbc_driver}" />
@@ -34,9 +47,7 @@
         <property name="user" value="${slave_mysql_jdbc_user}" />
         <property name="password" value="${slave_mysql_jdbc_password}" />
         <!--idleConnectionTestPeriod：每60秒检查所有连接池中的空闲连接。-->
-        <property name="idleConnectionTestPeriod" value="60"></property>
-        <!--acquireIncrement：链接用完了自动增量3个。 -->
-        <property name="acquireIncrement" value="3"></property>
+        <property name="idleConnectionTestPeriod" value="900"></property>
         <!--maxPoolSize：连接池中保留的最大连接数。 -->
         <property name="maxPoolSize" value="50"></property>
         <!--maxStatements：最大链接数。-->
@@ -45,6 +56,19 @@
         <property name="numHelperThreads" value="5"></property>
         <!--initialPoolSize：初始化时获取10个连接，取值应在minPoolSize与maxPoolSize之间。 -->
         <property name="initialPoolSize" value="10"></property>
+        <!--两次连接中间隔时间，单位毫秒，连接池在获得新连接时的间隔时间-->
+        <property name="acquireRetryDelay" value="1000"></property>
+        <!--连接池在获得新连接失败时重试的次数，如果小于等于0则无限重试直至连接获得成功-->
+        <property name="acquireRetryAttempts" value="5"></property>
+        <!--acquireIncrement：链接用完了自动增量3个 -->
+        <property name="acquireIncrement" value="3"></property>
+        <!--连接的最大空闲时间，如果超过这个时间，某个数据库连接还没有被使用，则会断开掉这个连接-->
+        <property name="maxIdleTime" value="600"></property>
+        <!--连接池保持的最小连接数-->
+        <property name="minPoolSize" value="10"></property>
+
+
+
     </bean>
     <!-- 配置SqlSessionFactory对象 -->
     <bean id="masterSqlSessionFactory" class="org.mybatis.spring.SqlSessionFactoryBean">

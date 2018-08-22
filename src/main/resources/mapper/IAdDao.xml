@@ -5,7 +5,13 @@
 	<select id="queryAdList" resultType="java.lang.String">
 		select adid
 		from ad
-		where state = 4
+		where state = 4 or state = 5 and is_disable = 0 and data_from in ("13","20","21","22","23","24","25","26","27")
+	</select>
+
+	<select id="queryAdList5" resultType="java.lang.String">
+		select adid
+		from ad
+		where state = 5 and is_disable = 0
 	</select>
 
 	<insert id="insert_state_log" parameterType="java.util.Map">
@@ -30,6 +36,15 @@
 		and adid = #{param.adid}
 	</select>
 
+	<select id="kkkquery" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select change_count from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and adid = #{param.adid}
+		and hour in (#{param.hour},#{param.last_1_hour},#{param.last_2_hour})
+	</select>
+
 	<select id="kkkqueryLast2HourStateList" parameterType="java.util.Map" resultType="java.lang.Integer">
 		select status
 		from ad_state_log
@@ -40,10 +55,93 @@
 		and <![CDATA[ create_time >= #{param.last_2_hour} ]]>
 		and adid = #{param.adid}
 	</select>
-
+	<select id="queryStateList" parameterType="java.lang.String" resultType="java.lang.Integer">
+		select change_count from ad where adid in
+		<foreach collection="list" separator="," item="adid" open="(" close=")">
+			#{adid}
+		</foreach>
+	</select>
+	<insert id="insertTogether" parameterType="com.powerwin.entity.StateLog">
+		insert into ad_state_log(adid,change_count,year,month,day,hour,create_time)
+		values
+		<foreach collection="list" item="log" separator=",">
+			(
+			#{log.adid},
+			#{log.change_count},
+			#{log.year},
+			#{log.month},
+			#{log.day},
+			#{log.hour},
+			#{log.create}
+			)
+		</foreach>
+	</insert>
 	<update id="querycloseTheAd" parameterType="java.lang.String" >
 		update ad
-		set state = 5
+		set is_disable = 1,
+		refuse_reason = #{refuse_reason}
+		where adid = #{adid}
+	</update>
+	<update id="queryupdatead3">
+		update ad set stability = 3
+		where adid IN
+		<foreach collection="list" separator="," open="(" close=")" item="adid">
+			#{adid}
+		</foreach>
+	</update>
+	<update id="queryupdatead2">
+		update ad set stability = 2
+		where adid IN
+		<foreach collection="list" separator="," open="(" close=")" item="adid">
+			#{adid}
+		</foreach>
+	</update>
+	<update id="queryupdatead1">
+		update ad set stability = 1
+		where adid IN
+		<foreach collection="list" separator="," open="(" close=")" item="adid">
+			#{adid}
+		</foreach>
+	</update>
+
+	<select id="kqueryall" resultType="java.lang.Integer">
+		select status
+		from ad_state_log
+		where year = #{year}
+		and month = #{month}
+		and day = #{day}
+		and <![CDATA[ create_time <= #{current} ]]>
+		and <![CDATA[ create_time >= #{last_1_hour} ]]>
+		and adid in
+		<foreach collection="ads" separator="," item="adid" open="(" close=")">
+			#{adid}
+		</foreach>
+	</select>
+	<select id="kqueryall2" resultType="java.lang.Integer">
+		select status
+		from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and <![CDATA[ create_time <= #{param.last_1_hour} ]]>
+		and <![CDATA[ create_time >= #{param.last_2_hour} ]]>
+		and adid in
+		<foreach collection="ads" separator="," item="adid" open="(" close=")">
+			#{adid}
+		</foreach>
+	</select>
+	<update id="disableadbylist">
+		update ad
+		set is_disable = 1,
+		refuse_reason = #{refuse_reason}
+		where adid IN
+		<foreach collection="ads" item="adid" open="(" close=")" separator=",">
+			#{adid}
+		</foreach>
+	</update>
+
+	<update id="queryupdate_for_stable">
+		update ad set stability = #{stable}
 		where adid = #{adid}
 	</update>
 </mapper>
