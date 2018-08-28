@@ -18,6 +18,21 @@ public class UserDaoTest {
 //    @Autowired
 //    IAdDao adDao;
 
+    @Autowired
+    IAdDao dao;
+
+    @Test
+    public void test19(){
+        Map<String,Object> map = new HashMap<String, Object>();
+        map.put("year",2018);
+        map.put("month",8);
+        map.put("day",28);
+        map.put("adid",923423);
+        map.put("last_1_hour",8);
+        List<Integer> integers = dao.kselectLastCount(map);
+        System.out.println(integers);
+    }
+
 
     @Test
     public void test2(){

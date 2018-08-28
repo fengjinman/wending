@@ -43,4 +43,12 @@ public interface IAdDao {
 
 	List<Integer> kkkquery(@Param("param")Map<String,Object> param);
 
+	List<Integer> kselectCurrentCount(@Param("param")Map<String,Object> param);
+
+	List<Integer> kselectLastCount(@Param("param")Map<String,Object> param);
+
+	List<Integer> kselectLast2Count(@Param("param")Map<String,Object> param);
+
+	Integer queryChangeCount(String adid);
+
 }

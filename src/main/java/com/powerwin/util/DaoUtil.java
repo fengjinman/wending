@@ -7,8 +7,6 @@ import org.springframework.context.support.ClassPathXmlApplicationContext;
  */
 public class DaoUtil {
 
-
-
     public static Object getDao(Class t){
         ClassPathXmlApplicationContext ctx = new ClassPathXmlApplicationContext(new String[]{"spring-mybatis.xml"});
         Object mapper = ctx.getBean(t);

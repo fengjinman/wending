@@ -5,7 +5,7 @@
 	<select id="queryAdList" resultType="java.lang.String">
 		select adid
 		from ad
-		where state = 4 or state = 5 and is_disable = 0 and data_from in ("13","20","21","22","23","24","25","26","27")
+		where state = 4 or state = 5 and is_disable = 0 and data_from in ("13","20","21","22","23","24","25","26","27","28")
 	</select>
 
 	<select id="queryAdList5" resultType="java.lang.String">
@@ -43,6 +43,31 @@
 		and day = #{param.day}
 		and adid = #{param.adid}
 		and hour in (#{param.hour},#{param.last_1_hour},#{param.last_2_hour})
+	</select>
+
+	<select id="kselectCurrentCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select change_count from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and adid = #{param.adid}
+		and hour = #{param.hour}
+	</select>
+	<select id="kselectLastCount" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select change_count from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and adid = #{param.adid}
+		and hour = #{param.last_1_hour}
+	</select>
+	<select id="kselectLast2Count" parameterType="java.util.Map" resultType="java.lang.Integer">
+		select change_count from ad_state_log
+		where year = #{param.year}
+		and month = #{param.month}
+		and day = #{param.day}
+		and adid = #{param.adid}
+		and hour = #{param.last_2_hour}
 	</select>
 
 	<select id="kkkqueryLast2HourStateList" parameterType="java.util.Map" resultType="java.lang.Integer">
@@ -144,4 +169,8 @@
 		update ad set stability = #{stable}
 		where adid = #{adid}
 	</update>
+
+	<select id="queryChangeCount" resultType="java.lang.Integer">
+		select change_count from ad where adid = #{adid}
+	</select>
 </mapper>
